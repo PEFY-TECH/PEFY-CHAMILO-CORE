@@ -3,10 +3,12 @@ on:
   push:
     paths:
       - 'pefy-distribution/tools/**'
+      - 'pefy-distribution/bridge/**'
       - '.github/workflows/pefy-chamilo-preflight.yml'
   pull_request:
     paths:
       - 'pefy-distribution/tools/**'
+      - 'pefy-distribution/bridge/**'
       - '.github/workflows/pefy-chamilo-preflight.yml'
   workflow_dispatch:
 permissions:
@@ -21,6 +23,11 @@ jobs:
         run: |
           php -l pefy-distribution/tools/chamilo_preflight.php
           php -l pefy-distribution/tools/verify_preflight.php
+      - name: Bridge PHP syntax and contract tests
+        run: |
+          php -l pefy-distribution/bridge/contract_validator.php
+          php -l pefy-distribution/bridge/test_contract_validator.php
+          php pefy-distribution/bridge/test_contract_validator.php
       - name: Source inventory unit tests
         run: python3 -m unittest discover -s pefy-distribution/tools -p 'test_source_integrity.py' -v
       - name: Source inventory report
