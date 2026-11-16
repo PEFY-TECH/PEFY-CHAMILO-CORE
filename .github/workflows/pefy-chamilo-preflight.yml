@@ -1,0 +1,40 @@
+name: PEFY Chamilo Preflight
+on:
+  push:
+    paths:
+      - 'pefy-distribution/tools/**'
+      - '.github/workflows/pefy-chamilo-preflight.yml'
+  pull_request:
+    paths:
+      - 'pefy-distribution/tools/**'
+      - '.github/workflows/pefy-chamilo-preflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax
+        run: |
+          php -l pefy-distribution/tools/chamilo_preflight.php
+          php -l pefy-distribution/tools/verify_preflight.php
+      - name: Preflight contract (environment may intentionally be incomplete)
+        run: php pefy-distribution/tools/verify_preflight.php
+      - name: Readiness evidence (do not fail solely on missing extensions)
+        shell: bash
+        run: |
+          set +e
+          php pefy-distribution/tools/chamilo_preflight.php > chamilo-preflight.json
+          status=$?
+          set -e
+          cat chamilo-preflight.json
+          echo "Readiness exit code: $status"
+          php -r '$x=json_decode(file_get_contents("chamilo-preflight.json"),true); if (!is_array($x) || !isset($x["checks"])) exit(1);'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chamilo-preflight
+          path: chamilo-preflight.json
+          retention-days: 14
