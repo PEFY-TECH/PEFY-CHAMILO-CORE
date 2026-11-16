@@ -21,6 +21,10 @@ jobs:
         run: |
           php -l pefy-distribution/tools/chamilo_preflight.php
           php -l pefy-distribution/tools/verify_preflight.php
+      - name: Source inventory unit tests
+        run: python3 -m unittest discover -s pefy-distribution/tools -p 'test_source_integrity.py' -v
+      - name: Source inventory report
+        run: python3 pefy-distribution/tools/source_integrity.py > chamilo-source-inventory.json
       - name: Preflight contract (environment may intentionally be incomplete)
         run: php pefy-distribution/tools/verify_preflight.php
       - name: Readiness evidence (do not fail solely on missing extensions)
@@ -36,5 +40,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: chamilo-preflight
-          path: chamilo-preflight.json
+          path: |
+            chamilo-preflight.json
+            chamilo-source-inventory.json
           retention-days: 14
