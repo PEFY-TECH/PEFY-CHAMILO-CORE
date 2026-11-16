@@ -1,0 +1,17 @@
+:root {
+  --pefy-brand-primary: #0A4BA6;
+  --pefy-brand-primary-strong: #08377C;
+  --pefy-brand-accent: #D4A257;
+  --pefy-brand-surface: #FFFFFF;
+  --pefy-brand-text: #17263D;
+  --pefy-brand-focus: #F59E0B;
+  --pefy-radius: 0.75rem;
+}
+.pefy-shell { color: var(--pefy-brand-text); background: var(--pefy-brand-surface); font-family: system-ui, sans-serif; }
+.pefy-shell__header { background: var(--pefy-brand-primary); color: white; padding: 1.25rem; }
+.pefy-shell__nav { display: flex; flex-wrap: wrap; gap: .75rem; }
+.pefy-shell__nav a { color: inherit; padding: .5rem .75rem; border-radius: .5rem; }
+.pefy-shell__nav a:focus-visible { outline: 3px solid var(--pefy-brand-focus); outline-offset: 3px; }
+.pefy-shell__main { max-width: 72rem; margin-inline: auto; padding: 2rem 1rem; }
+.pefy-shell__card { border: 1px solid #D5DDE8; border-radius: var(--pefy-radius); padding: 1.25rem; }
+@media (prefers-reduced-motion: reduce) { .pefy-shell *, .pefy-shell *::before, .pefy-shell *::after { animation: none !important; transition: none !important; } }
