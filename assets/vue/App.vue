@@ -1,5 +1,5 @@
 <template>
-  <Loading :visible="platformConfigurationStore.isLoading" />
+  <Loading :visible="platformConfigurationStore.isLoading" :locale="locale" />
 
   <component
     :is="layout"
