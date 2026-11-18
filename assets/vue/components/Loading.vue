@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { loadingCopy, normalizeLoadingDelay } from "../utils/loadingExperience"
+
 export default {
   name: "Loading",
   props: {
@@ -32,19 +34,14 @@ export default {
     return { showAnimation: false, animationTimer: null }
   },
   computed: {
-    isFrench() {
-      return String(this.locale || "fr").toLowerCase().startsWith("fr")
+    copy() {
+      return loadingCopy(this.locale, this.messageOverride)
     },
     message() {
-      if (this.messageOverride) return this.messageOverride
-      return this.isFrench
-        ? "Préparation de votre espace d’apprentissage…"
-        : "Preparing your learning space…"
+      return this.copy.message
     },
     hint() {
-      return this.isFrench
-        ? "Votre espace s’ouvrira dès qu’il sera prêt."
-        : "Your space will open as soon as it is ready."
+      return this.copy.hint
     },
   },
   watch: {
@@ -57,7 +54,7 @@ export default {
           this.animationTimer = setTimeout(() => {
             this.showAnimation = true
             this.animationTimer = null
-          }, Math.max(0, this.delayMs))
+          }, normalizeLoadingDelay(this.delayMs))
         }
       },
     },
